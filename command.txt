@@ -1,0 +1,9 @@
+# ionCube Loader Installer - CloudPanel/Ubuntu servers only
+# Usage: sudo bash install-ioncube.sh <php_version>
+# Example: sudo bash install-ioncube.sh 8.2
+# Note: Works only on standard PHP-FPM (CloudPanel). NOT compatible with CyberPanel/LiteSpeed (lsphp).
+  sudo bash install-ioncube.sh 8.2
+
+
+#RDP
+  irm https://raw.githubusercontent.com/tanim1823/elevohost-tools/main/Enable-RDP.ps1 | iex
