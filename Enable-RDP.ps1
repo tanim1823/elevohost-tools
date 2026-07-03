@@ -206,7 +206,7 @@ function Create-PremiumButton {
     return $button
 }
 
-Write-Host "Initializing ElevoHost Premium RDP Light Suite..."
+Write-Host "Initializing ElevoHost Premium RDP Suite..."
 
 # Create Main Dashboard Form
 $form = New-Object System.Windows.Forms.Form
