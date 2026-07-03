@@ -1,5 +1,5 @@
 # Enable-RDP.ps1
-# PowerShell script to activate Remote Desktop Protocol with Premium Modern GUI
+# PowerShell script to activate Remote Desktop Protocol with Premium Modern Light GUI
 # Run with administrator privileges
 
 # Make sure we have the required assemblies
@@ -206,7 +206,7 @@ function Create-PremiumButton {
     return $button
 }
 
-Write-Host "Initializing ElevoHost Premium RDP Cluster..."
+Write-Host "Initializing ElevoHost Premium RDP Light Suite..."
 
 # Create Main Dashboard Form
 $form = New-Object System.Windows.Forms.Form
@@ -214,20 +214,20 @@ $form.Text = "ElevoHost Suite"
 $form.Size = New-Object System.Drawing.Size(820, 710)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "None" 
-$form.BackColor = [System.Drawing.Color]::FromArgb(11, 14, 28) # Richer Deeper Dark
+$form.BackColor = [System.Drawing.Color]::FromArgb(244, 246, 250) # Light Platinum Surface
 
 # Top Header Bar
 $headerPanel = New-Object System.Windows.Forms.Panel
 $headerPanel.Size = New-Object System.Drawing.Size(820, 85)
 $headerPanel.Location = New-Object System.Drawing.Point(0, 0)
-$headerPanel.BackColor = [System.Drawing.Color]::FromArgb(19, 23, 43)
+$headerPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 255, 255) # Pure White
 $form.Controls.Add($headerPanel)
 
 # Branding Title
 $headerLabel = New-Object System.Windows.Forms.Label
 $headerLabel.Text = "ELEVO"
 $headerLabel.Font = New-Object System.Drawing.Font("Segoe UI", 24, [System.Drawing.FontStyle]::Bold)
-$headerLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 198, 251) # Sleek Neon Cyan
+$headerLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 145, 234) # Tech Cyan Blue
 $headerLabel.Size = New-Object System.Drawing.Size(130, 45)
 $headerLabel.Location = New-Object System.Drawing.Point(35, 20)
 $headerPanel.Controls.Add($headerLabel)
@@ -235,7 +235,7 @@ $headerPanel.Controls.Add($headerLabel)
 $subHeaderLabel = New-Object System.Windows.Forms.Label
 $subHeaderLabel.Text = "HOST"
 $subHeaderLabel.Font = New-Object System.Drawing.Font("Segoe UI", 24, [System.Drawing.FontStyle]::Regular)
-$subHeaderLabel.ForeColor = [System.Drawing.Color]::White
+$subHeaderLabel.ForeColor = [System.Drawing.Color]::FromArgb(55, 71, 79) # Slate Dark Grey
 $subHeaderLabel.Size = New-Object System.Drawing.Size(120, 45)
 $subHeaderLabel.Location = New-Object System.Drawing.Point(158, 20)
 $headerPanel.Controls.Add($subHeaderLabel)
@@ -244,11 +244,11 @@ $headerPanel.Controls.Add($subHeaderLabel)
 $statusPanel = New-Object System.Windows.Forms.Panel
 $statusPanel.Size = New-Object System.Drawing.Size(750, 115)
 $statusPanel.Location = New-Object System.Drawing.Point(35, 115)
-$statusPanel.BackColor = [System.Drawing.Color]::FromArgb(19, 23, 43)
+$statusPanel.BackColor = [System.Drawing.Color]::White
 $form.Controls.Add($statusPanel)
 
 $currentStatus = Get-RDPStatus
-$statusColor = if ($currentStatus -eq "Enabled") { [System.Drawing.Color]::FromArgb(0, 230, 118) } else { [System.Drawing.Color]::FromArgb(255, 23, 68) }
+$statusColor = if ($currentStatus -eq "Enabled") { [System.Drawing.Color]::FromArgb(0, 200, 83) } else { [System.Drawing.Color]::FromArgb(213, 0, 0) }
 
 # Graphic Indicator Engine
 $statusIconPanel = New-Object System.Windows.Forms.Panel
@@ -275,16 +275,16 @@ $statusPanel.Controls.Add($statusLabel)
 
 $computerInfoLabel = New-Object System.Windows.Forms.Label
 $computerInfoLabel.Text = "INSTANCE VIRTUAL NODE ID :  $env:COMPUTERNAME"
-$computerInfoLabel.Font = New-Object System.Drawing.Font("Consolas", 9.5)
-$computerInfoLabel.ForeColor = [System.Drawing.Color]::FromArgb(145, 155, 185)
+$computerInfoLabel.Font = New-Object System.Drawing.Font("Consolas", 9.5, [System.Drawing.FontStyle]::Bold)
+$computerInfoLabel.ForeColor = [System.Drawing.Color]::FromArgb(100, 110, 130)
 $computerInfoLabel.Size = New-Object System.Drawing.Size(500, 22)
 $computerInfoLabel.Location = New-Object System.Drawing.Point(95, 53)
 $statusPanel.Controls.Add($computerInfoLabel)
 
 $ipInfoLabel = New-Object System.Windows.Forms.Label
 $ipInfoLabel.Text = "NETWORK V4 IP ADDRESS  :  $((Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.InterfaceAlias -notlike '*Loopback*' -and $_.InterfaceAlias -notlike '*VM*'}).IPAddress -join ', ')"
-$ipInfoLabel.Font = New-Object System.Drawing.Font("Consolas", 9.5)
-$ipInfoLabel.ForeColor = [System.Drawing.Color]::FromArgb(145, 155, 185)
+$ipInfoLabel.Font = New-Object System.Drawing.Font("Consolas", 9.5, [System.Drawing.FontStyle]::Bold)
+$ipInfoLabel.ForeColor = [System.Drawing.Color]::FromArgb(100, 110, 130)
 $ipInfoLabel.Size = New-Object System.Drawing.Size(630, 22)
 $ipInfoLabel.Location = New-Object System.Drawing.Point(95, 75)
 $statusPanel.Controls.Add($ipInfoLabel)
@@ -302,16 +302,16 @@ $actionEnableRDP = {
     $result = Enable-RemoteDesktop
     if ($result.Success) {
         $logHeader.Text = "TASK COMPLETED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 230, 118)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 200, 83)
         $currentStatus = Get-RDPStatus
         $statusLabel.Text = "SYSTEM RDP NODE STATUS: " + $currentStatus.ToUpper()
-        $statusLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 230, 118)
-        $statusColor = [System.Drawing.Color]::FromArgb(0, 230, 118)
+        $statusLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 200, 83)
+        $statusColor = [System.Drawing.Color]::FromArgb(0, 200, 83)
         $statusIconPanel.Invalidate()
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] SUCCESS: $($result.Message)`r`n")
     } else {
         $logHeader.Text = "EXECUTION EXCEPTION PIPELINE"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 23, 68)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(213, 0, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] ERROR: $($result.Message)`r`n")
     }
 }
@@ -322,12 +322,12 @@ $actionActivator = {
     $result = Run-Activator
     if ($result.Success) {
         $logHeader.Text = "ACTIVATION SUITE SYNCHRONIZED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 198, 251)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 145, 234)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] SUCCESS: $($result.Message)`r`n")
         if ($result.Output) { $outputTextBox.AppendText("$($result.Output)`r`n") }
     } else {
         $logHeader.Text = "DEPLOYMENT TASK TERMINATED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 23, 68)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(213, 0, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] FAULT: $($result.Message)`r`n")
     }
 }
@@ -338,11 +338,11 @@ $actionFirewall = {
     $result = Disable-WindowsFirewall
     if ($result.Success) {
         $logHeader.Text = "FIREWALL ACCESS CONTROL TERMINATED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 171, 0)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(230, 81, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] WARNING: $($result.Message)`r`n")
     } else {
         $logHeader.Text = "FIREWALL HOOK ACCESS DENIED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 23, 68)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(213, 0, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] EXCEPTION: $($result.Message)`r`n")
     }
 }
@@ -353,37 +353,37 @@ $actionPower = {
     $result = Set-HighPerformancePower
     if ($result.Success) {
         $logHeader.Text = "POWER PROFILES ENGINE SYNCHRONIZED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 230, 118)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 200, 83)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] CORE: $($result.Message)`r`n")
     } else {
         $logHeader.Text = "SCHEDULER ENGINE EXCEPTION OVERRIDE"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 23, 68)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(213, 0, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] ERROR: $($result.Message)`r`n")
     }
 }
 
 $actionLockout = {
-    $logHeader.Text = "DISABLING SECURITY RETRIES RESTRICTION MAPS..."
+    $logHeader.Text = "REMOVING SECURITY RETRIES RESTRICTION MAPS..."
     $logPanel.Update()
     $result = Disable-AccountLockout
     if ($result.Success) {
         $logHeader.Text = "LOCKOUT RETRIES MAP DISMANTLED"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 230, 118)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(0, 200, 83)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] SECURITY: $($result.Message)`r`n")
     } else {
         $logHeader.Text = "LOCKOUT CRITICAL ERROR EXCEPTION"
-        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(255, 23, 68)
+        $logHeader.ForeColor = [System.Drawing.Color]::FromArgb(213, 0, 0)
         $outputTextBox.AppendText("[$(Get-Date -Format 'HH:mm:ss')] ERROR: $($result.Message)`r`n")
     }
 }
 
-# Advanced Proportional Layout Matrix (Slate Palette Integration)
-$btnRDP = Create-PremiumButton -Text "Enable Remote Desktop" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 10)) -BackColor ([System.Drawing.Color]::FromArgb(28, 77, 242)) -HoverColor ([System.Drawing.Color]::FromArgb(45, 96, 255)) -Action $actionEnableRDP
-$btnAct = Create-PremiumButton -Text "Run Windows Activator" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 90)) -BackColor ([System.Drawing.Color]::FromArgb(118, 56, 250)) -HoverColor ([System.Drawing.Color]::FromArgb(138, 82, 255)) -Action $actionActivator
-$btnFw  = Create-PremiumButton -Text "Disable Windows Firewall" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 170)) -BackColor ([System.Drawing.Color]::FromArgb(224, 40, 66)) -HoverColor ([System.Drawing.Color]::FromArgb(245, 65, 92)) -Action $actionFirewall
+# Advanced Light Balanced Slate Matrix Buttons
+$btnRDP = Create-PremiumButton -Text "Enable Remote Desktop" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 10)) -BackColor ([System.Drawing.Color]::FromArgb(41, 121, 255)) -HoverColor ([System.Drawing.Color]::FromArgb(0, 91, 234)) -Action $actionEnableRDP
+$btnAct = Create-PremiumButton -Text "Run Windows Activator" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 90)) -BackColor ([System.Drawing.Color]::FromArgb(101, 31, 255)) -HoverColor ([System.Drawing.Color]::FromArgb(74, 20, 140)) -Action $actionActivator
+$btnFw  = Create-PremiumButton -Text "Disable Windows Firewall" -Size (New-Object System.Drawing.Size(360, 65)) -Location (New-Object System.Drawing.Point(0, 170)) -BackColor ([System.Drawing.Color]::FromArgb(255, 23, 68)) -HoverColor ([System.Drawing.Color]::FromArgb(183, 28, 28)) -Action $actionFirewall
 
-$btnPwr = Create-PremiumButton -Text "Optimize Power Infrastructure" -Size (New-Object System.Drawing.Size(365, 65)) -Location (New-Object System.Drawing.Point(385, 10)) -BackColor ([System.Drawing.Color]::FromArgb(16, 185, 129)) -HoverColor ([System.Drawing.Color]::FromArgb(20, 210, 148)) -Action $actionPower
-$btnLck = Create-PremiumButton -Text "Disable Account Lockouts" -Size (New-Object System.Drawing.Size(365, 65)) -Location (New-Object System.Drawing.Point(385, 90)) -BackColor ([System.Drawing.Color]::FromArgb(245, 158, 11)) -HoverColor ([System.Drawing.Color]::FromArgb(255, 180, 35)) -Action $actionLockout
+$btnPwr = Create-PremiumButton -Text "Optimize Power Infrastructure" -Size (New-Object System.Drawing.Size(365, 65)) -Location (New-Object System.Drawing.Point(385, 10)) -BackColor ([System.Drawing.Color]::FromArgb(0, 230, 118)) -HoverColor ([System.Drawing.Color]::FromArgb(0, 145, 52)) -Action $actionPower
+$btnLck = Create-PremiumButton -Text "Disable Account Lockouts" -Size (New-Object System.Drawing.Size(365, 65)) -Location (New-Object System.Drawing.Point(385, 90)) -BackColor ([System.Drawing.Color]::FromArgb(255, 145, 0)) -HoverColor ([System.Drawing.Color]::FromArgb(230, 81, 0)) -Action $actionLockout
 
 $gridPanel.Controls.AddRange(@($btnRDP, $btnAct, $btnFw, $btnPwr, $btnLck))
 
@@ -391,13 +391,14 @@ $gridPanel.Controls.AddRange(@($btnRDP, $btnAct, $btnFw, $btnPwr, $btnLck))
 $logPanel = New-Object System.Windows.Forms.Panel
 $logPanel.Size = New-Object System.Drawing.Size(750, 150)
 $logPanel.Location = New-Object System.Drawing.Point(35, 510)
-$logPanel.BackColor = [System.Drawing.Color]::FromArgb(19, 23, 43)
+$logPanel.BackColor = [System.Drawing.Color]::White
+$logPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $form.Controls.Add($logPanel)
 
 $logHeader = New-Object System.Windows.Forms.Label
 $logHeader.Text = "SYSTEM CONSOLE FEED PROCESSOR"
 $logHeader.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-$logHeader.ForeColor = [System.Drawing.Color]::FromArgb(110, 122, 156)
+$logHeader.ForeColor = [System.Drawing.Color]::FromArgb(120, 130, 150)
 $logHeader.Size = New-Object System.Drawing.Size(700, 25)
 $logHeader.Location = New-Object System.Drawing.Point(18, 12)
 $logPanel.Controls.Add($logHeader)
@@ -406,9 +407,9 @@ $outputTextBox = New-Object System.Windows.Forms.RichTextBox
 $outputTextBox.Size = New-Object System.Drawing.Size(714, 95)
 $outputTextBox.Location = New-Object System.Drawing.Point(18, 38)
 $outputTextBox.ReadOnly = $true
-$outputTextBox.BackColor = [System.Drawing.Color]::FromArgb(11, 14, 28)
-$outputTextBox.ForeColor = [System.Drawing.Color]::FromArgb(0, 230, 118) # Sharp Matrix Green
-$outputTextBox.Font = New-Object System.Drawing.Font("Consolas", 9.5, [System.Drawing.FontStyle]::Regular)
+$outputTextBox.BackColor = [System.Drawing.Color]::FromArgb(244, 246, 250)
+$outputTextBox.ForeColor = [System.Drawing.Color]::FromArgb(38, 50, 56) # Deep Slate Text
+$outputTextBox.Font = New-Object System.Drawing.Font("Consolas", 10, [System.Drawing.FontStyle]::Bold)
 $outputTextBox.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $logPanel.Controls.Add($outputTextBox)
 
@@ -416,13 +417,13 @@ $logPanel.Controls.Add($outputTextBox)
 $footerPanel = New-Object System.Windows.Forms.Panel
 $footerPanel.Size = New-Object System.Drawing.Size(820, 35)
 $footerPanel.Location = New-Object System.Drawing.Point(0, 675)
-$footerPanel.BackColor = [System.Drawing.Color]::FromArgb(19, 23, 43)
+$footerPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
 $form.Controls.Add($footerPanel)
 
 $footerLabel = New-Object System.Windows.Forms.Label
 $footerLabel.Text = "POWERED BY ELEVOHOST AUTOMATION SUITE"
 $footerLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
-$footerLabel.ForeColor = [System.Drawing.Color]::FromArgb(85, 95, 125)
+$footerLabel.ForeColor = [System.Drawing.Color]::FromArgb(140, 150, 170)
 $footerLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 $footerLabel.Dock = [System.Windows.Forms.DockStyle]::Fill
 $footerPanel.Controls.Add($footerLabel)
@@ -433,7 +434,7 @@ $exitButton.Text = "×"
 $exitButton.Size = New-Object System.Drawing.Size(40, 40)
 $exitButton.Location = New-Object System.Drawing.Point(755, 20)
 $exitButton.BackColor = [System.Drawing.Color]::Transparent
-$exitButton.ForeColor = [System.Drawing.Color]::White
+$exitButton.ForeColor = [System.Drawing.Color]::FromArgb(120, 130, 150)
 $exitButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $exitButton.Font = New-Object System.Drawing.Font("Arial", 22, [System.Drawing.FontStyle]::Regular)
 $exitButton.Cursor = [System.Windows.Forms.Cursors]::Hand
@@ -467,8 +468,8 @@ $headerPanel.Add_MouseUp({ $script:isDragging = $false })
 
 # Frame execution runtime logs
 $timestamp = Get-Date -Format 'HH:mm:ss'
-$outputTextBox.AppendText("[$timestamp] SYSTEM: ElevoHost Core Suite Initialized Engine Infrastructure...`r`n")
-$outputTextBox.AppendText("[$timestamp] STATUS: Telemetry endpoint mapping verified RDP node state as $currentStatus.`r`n")
+$outputTextBox.AppendText("[$timestamp] SYSTEM: ElevoHost Core Suite Light Engine Initialized...`r`n")
+$outputTextBox.AppendText("[$timestamp] STATUS: Telemetry verified RDP node state as $currentStatus.`r`n")
 
 [System.Windows.Forms.Application]::EnableVisualStyles()
 $form.ShowDialog()
